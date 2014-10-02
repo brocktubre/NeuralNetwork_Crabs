@@ -15,14 +15,15 @@ print("The problem at hand is to identify the sex of a crab given the observed v
 print("Compile & run $: python3 program_crabs.py")
 print("*********************************************************************************\n");
 
-# List instantiation 
+# List instantiation
+iterations = 1000
 weights = []
 FLs = []
 CWs = []
 SEXs = []
-weights = [0.3, 0.4, 1]
+weights = [0.4, 0.9, 1]
 bias = weights[2]
-alpha = 0.01
+alpha = 0.001
 num_right = 0
 # Picks a random crab as input
 random_crab = random.randint(1, 199)
@@ -42,43 +43,41 @@ def ReadCsvFile():
 def LearningFunc(fl, cw, sex, alpha):
 	guess = GuessFunc(fl, cw)
 	if guess and sex == 'M':
-		error = 2
-	elif not guess and sex == 'F':
 		error = -2
+	elif not guess and sex == 'F':
+		error = 2
 	else:
 		error = 0	
 
 	weights[0] = weights[0] + error * fl * alpha
 	weights[1] = weights[1] + error * cw * alpha
-
-	# print(guess)
-	# sys.stdout.write("Guess: ")
-	# if guess > 1:
-	# 	print("Male")
-	# else:
-	# 	print("Female")
-	# print(sex)	
+	print(weights[0])
+	print(weights[1])
 
 def TestingFunc(fl, cw, sex, weightFL, weightCL):
 	guess = GuessFunc(fl, cw)
 	if guess and sex == 'M':
 		print("Right!")
-		num_right += 1
+		AddOne()
 	elif not guess and sex == 'F':
 		print("Right!")
-		num_right += 1
+		AddOne()
 	else:
 		print("Wrong")
 
 
 def GuessFunc(fl, cw):
 	myguess = fl * weights[0] + cw * weights[1] + bias
-	return(myguess)
+	return(myguess > 0)
+
+def AddOne():
+	global num_right
+	num_right = num_right + 1
 
 # Reads CSV file and stores Frontal lobe size, carapace length, and sex		
 ReadCsvFile()
 
-for i in range(100):
+for i in range(iterations):
 	random_crab = random.randint(1, 199)
 	FL = float(FLs[random_crab])
 	CW = float(CWs[random_crab])
@@ -86,14 +85,16 @@ for i in range(100):
 	LearningFunc(FL, CW, Sex, alpha)
 	alpha = alpha / 1.05
 	
-for i in range(100):
+for i in range(iterations):
 	random_crab = random.randint(1, 199)
 	FL = float(FLs[random_crab])
 	CW = float(CWs[random_crab])
 	Sex = SEXs[random_crab]
 	TestingFunc(FL, CW, Sex, weights[0], weights[1])
-	sys.stdout.write("Percent right: ")
-	print(num_right/100)
+
+print("")
+sys.stdout.write("Percent right: ")
+print(num_right/iterations) 
 
 
 
