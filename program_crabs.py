@@ -27,6 +27,7 @@ print("***************************\n\n");
 weights = []
 FLs = []
 CLs = []
+SEXs = []
 weights = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
 random_factor = random.randint(-5, 5)
 random_crab = random.randint(1, 199)
@@ -38,18 +39,21 @@ with open('crabs.csv') as csvfile:
 	for row in readCSV:
 		fl = row[4]
 		cl = row[6]
+		sex = row[2]
 		FLs.append(fl)
 		CLs.append(cl)
+		SEXs.append(sex)
 
 FL = 	float(FLs[random_crab])
-CL = float(Ls[random_crab])
+CL = float(CLs[random_crab])
+Sex = SEXs[random_crab]
 
-def GetFilePath(file_name):
-	current_dir = os.getcwd()
-	file_path = os.path.join(current_dir, file_name)
-	return file_path
+#def GetFilePath(file_name):
+	#current_dir = os.getcwd()
+	#file_path = os.path.join(current_dir, file_name)
+	#return file_path
 
-path = GetFilePath('crabs.csv')	
+#path = GetFilePath('crabs.csv')	
 
 #def ReadCsvFile(filepath):
 	#with open(filepath, 'rU') as csvfile:
@@ -66,20 +70,28 @@ print(FL)
 sys.stdout.write("Carapace length = ")
 print(CL)
 print("\n")
-print("\n")
-print("\n")
-print(x+y)
 
 # random_weight =  {0.0, 0.1, 0.2, 0.3, 0.4, 0.5}
 # random_factor = {-5, 5}
-function = (((weight * float(FLs[random_crab])) + (weight * float(CLs[random_crab])) * random_factor) / 2
+#function = (((weight * FL) + (weight * CL) * random_factor) / 2)
+function = (((weight * FL) + (weight * CL) * random_factor) / 2)
 MFoutput = math.copysign(1, function)
 
 
 if MFoutput > 1:
-	print("Male")
+	print("Guess = M")
+	sys.stdout.write("Actual sex = ")
+	print(Sex)
 else:
-	print("Female")
+	print("Guess = F")
+	sys.stdout.write("Actual sex = ")
+	print(Sex)
+
+
+sys.stdout.write("Weight factor = ")
+print(weight)
+
+
 
 
 
