@@ -5,9 +5,15 @@ import math
 import sys
 
 
-print("\n***************************");
+print("\n*********************************************************************************");
+print("program_crabs.py")
+sys.stdout.write("Directory ")
+print(os.getcwd())
+print("Created by Brock Tubre on 09/02/14")
+print("")
 print("The problem at hand is to identify the sex of a crab given the observed values for each of these physical characteristics. You are expected to feed previously recorded inputs to a Neural Network and then tuning it to produce the desired target outputs.");
-print("***************************\n\n");
+print("Compile & run $: python3 program_crabs.py")
+print("*********************************************************************************\n");
 
 # int1 = 5;
 # int2 = 10;
@@ -28,11 +34,14 @@ weights = []
 FLs = []
 CLs = []
 SEXs = []
-weights = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
-random_factor = random.randint(-5, 5)
+weights = [0.1, 0.2, 0.3, 0.4, 0.5]
 random_crab = random.randint(1, 199)
-random_weight = random.randint(0, 5)
+random_weight = random.randint(0, 4)
 weight = weights[random_weight]
+
+random_factor = random.randint(-5, 5)
+while random_factor == 0:
+	random_factor = random.randint(-5, 5)
 
 with open('crabs.csv') as csvfile:
 	readCSV = csv.reader(csvfile, delimiter=',')
@@ -74,8 +83,9 @@ print("\n")
 # random_weight =  {0.0, 0.1, 0.2, 0.3, 0.4, 0.5}
 # random_factor = {-5, 5}
 #function = (((weight * FL) + (weight * CL) * random_factor) / 2)
-function = (((weight * FL) + (weight * CL) * random_factor) / 2)
-MFoutput = math.copysign(1, function)
+function = (((weight * FL + weight * CL) * random_factor) / 2)
+print(function)
+MFoutput = math.copysign(function, function)
 
 
 if MFoutput > 1:
