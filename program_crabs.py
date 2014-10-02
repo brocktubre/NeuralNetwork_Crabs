@@ -18,18 +18,14 @@ print("*************************************************************************
 # List instantiation 
 weights = []
 FLs = []
-CLs = []
+CWs = []
 SEXs = []
-weights = [0.1, 0.2, 0.3, 0.4, 0.5]
+weights = [0.3, 0.4, 1]
+bias = weights[2]
+alpha = 0.01
+num_right = 0
 # Picks a random crab as input
 random_crab = random.randint(1, 199)
-# Picks a random weight to use
-random_weight = random.randint(0, 4)
-weight = weights[random_weight] 
-
-random_factor = random.randint(-5, 5)
-while random_factor == 0:
-	random_factor = random.randint(-5, 5)
 
 # Reads in CSV file and stores input values
 def ReadCsvFile():
@@ -37,46 +33,67 @@ def ReadCsvFile():
 		readCSV = csv.reader(csvfile, delimiter=',')
 		for row in readCSV:
 			fl = row[4]
-			cl = row[6]
+			cw = row[7]
 			sex = row[2]
 			FLs.append(fl)
-			CLs.append(cl)
+			CWs.append(cw)
 			SEXs.append(sex)
-		print(SEXs)
+
+def LearningFunc(fl, cw, sex, alpha):
+	guess = GuessFunc(fl, cw)
+	if guess and sex == 'M':
+		error = 2
+	elif not guess and sex == 'F':
+		error = -2
+	else:
+		error = 0	
+
+	weights[0] = weights[0] + error * fl * alpha
+	weights[1] = weights[1] + error * cw * alpha
+
+	# print(guess)
+	# sys.stdout.write("Guess: ")
+	# if guess > 1:
+	# 	print("Male")
+	# else:
+	# 	print("Female")
+	# print(sex)	
+
+def TestingFunc(fl, cw, sex, weightFL, weightCL):
+	guess = GuessFunc(fl, cw)
+	if guess and sex == 'M':
+		print("Right!")
+		num_right += 1
+	elif not guess and sex == 'F':
+		print("Right!")
+		num_right += 1
+	else:
+		print("Wrong")
+
+
+def GuessFunc(fl, cw):
+	myguess = fl * weights[0] + cw * weights[1] + bias
+	return(myguess)
 
 # Reads CSV file and stores Frontal lobe size, carapace length, and sex		
-ReadCsvFile()	
+ReadCsvFile()
 
-FL = float(FLs[random_crab])
-CL = float(CLs[random_crab])
-Sex = SEXs[random_crab]
-		
-
-sys.stdout.write("Crab ID = ")
-print(random_crab)
-sys.stdout.write("Frontal lobe size = ")
-print(FL)
-sys.stdout.write("Carapace length = ")
-print(CL)
-print("\n")
-
-function = (((weight * FL + weight * CL) * random_factor) / 2)
-print(function)
-MFoutput = math.tanh(function)
-
-
-if MFoutput > 1:
-	print("Guess = M")
-	sys.stdout.write("Actual sex = ")
-	print(Sex)
-else:
-	print("Guess = F")
-	sys.stdout.write("Actual sex = ")
-	print(Sex)
-
-
-sys.stdout.write("Weight factor = ")
-print(weight)
+for i in range(100):
+	random_crab = random.randint(1, 199)
+	FL = float(FLs[random_crab])
+	CW = float(CWs[random_crab])
+	Sex = SEXs[random_crab]
+	LearningFunc(FL, CW, Sex, alpha)
+	alpha = alpha / 1.05
+	
+for i in range(100):
+	random_crab = random.randint(1, 199)
+	FL = float(FLs[random_crab])
+	CW = float(CWs[random_crab])
+	Sex = SEXs[random_crab]
+	TestingFunc(FL, CW, Sex, weights[0], weights[1])
+	sys.stdout.write("Percent right: ")
+	print(num_right/100)
 
 
 
