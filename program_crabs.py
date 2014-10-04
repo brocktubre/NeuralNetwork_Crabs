@@ -15,18 +15,21 @@ print("The problem at hand is to identify the sex of a crab given the observed v
 print("Compile & run $: python3 program_crabs.py")
 print("*********************************************************************************\n");
 
+# Picks a random crab as input
+random_weight1 = random.randint(1, 5)
+random_weight2 = random.randint(1, 5)
+random_crab = random.randint(1, 199)
 # List instantiation
-iterations = 1000
+iterations = 100
 weights = []
 FLs = []
 CWs = []
 SEXs = []
-weights = [0.4, 0.9, 1]
+weights = [random_weight1, random_weight2, 1]
 bias = weights[2]
 alpha = 0.001
 num_right = 0
-# Picks a random crab as input
-random_crab = random.randint(1, 199)
+
 
 # Reads in CSV file and stores input values
 def ReadCsvFile():
@@ -51,19 +54,17 @@ def LearningFunc(fl, cw, sex, alpha):
 
 	weights[0] = weights[0] + error * fl * alpha
 	weights[1] = weights[1] + error * cw * alpha
-	print(weights[0])
-	print(weights[1])
+	#print(weights[0])
+	#print(weights[1])
 
 def TestingFunc(fl, cw, sex, weightFL, weightCL):
 	guess = GuessFunc(fl, cw)
 	if guess and sex == 'M':
-		print("Right!")
+		#print("Right!")
 		AddOne()
 	elif not guess and sex == 'F':
-		print("Right!")
+		#print("Right!")
 		AddOne()
-	else:
-		print("Wrong")
 
 
 def GuessFunc(fl, cw):
@@ -92,9 +93,16 @@ for i in range(iterations):
 	Sex = SEXs[random_crab]
 	TestingFunc(FL, CW, Sex, weights[0], weights[1])
 
+sys.stdout.write("Number of learning/test cases: ")
+print(iterations)
+sys.stdout.write("Number of correct guesses: ")
+print(num_right)
+sys.stdout.write("Number of incorrect guesses: ")
+print(iterations - num_right)
 print("")
 sys.stdout.write("Percent right: ")
 print(num_right/iterations) 
+print("")
 
 
 
