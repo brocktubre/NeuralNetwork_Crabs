@@ -5,17 +5,17 @@ import math
 import sys
 
 
-# print("\n*********************************************************************************");
-# print("program_crabs.py")
-# sys.stdout.write("Directory ")
-# print(os.getcwd())
-# print("Created by Brock Tubre on 10/24/14 -- CSC475")
-# print("")
-# print("Using the crab’s dataset, build a classifier that can identify the sex of a crab from its physical measurements.");
-# print("Five physical measurements of a crab considered are: frontal lobe size (FLB), rear width (RW), length (CL), width (CW), and depth (BD).");
-# print("This program uses a Batch Gradient Descnes Algorithm")
-# print("Compile & run $: python3 program_crabs2.py")
-# print("*********************************************************************************\n");
+print("\n*********************************************************************************");
+print("program_crabs.py")
+sys.stdout.write("Directory ")
+print(os.getcwd())
+print("Created by Brock Tubre on 10/24/14 -- CSC475")
+print("")
+print("Using the crab’s dataset, build a classifier that can identify the sex of a crab from its physical measurements.");
+print("Five physical measurements of a crab considered are: frontal lobe size (FLB), rear width (RW), length (CL), width (CW), and depth (BD).");
+print("This program uses a Batch Gradient Descnes Algorithm")
+print("Compile & run $: python3 program_crabs2.py")
+print("*********************************************************************************\n");
 
 # Random number from 1 to 199. Is used as the index for a specific crab 
 random_crab_index = random.randint(1, 199)
@@ -172,29 +172,16 @@ for i in range(iterations):
 		count_female = AddOneFemale()
 
 # print("--- FLBS ---")
-for i in range(iterations):
-	sys.stdout.write("%s" %delta_db_list[i])
-	sys.stdout.write("\n")
-
-# print("--- CW ---")	
-# for i in range(iterations):	
-# 	print(delta_cw_list[i])
-# print("--- CL ---")	
-# for i in range(iterations):	
-# 	print(delta_cl_list[i])
-# print("--- RW ---")
-# for i in range(iterations):	
-# 	print(delta_rw_list[i])
-# print("--- DB ---")	
 # for i in range(iterations):
-# 	print(delta_db_list[i])
+# 	sys.stdout.write("%s" %delta_db_list[i])
+# 	sys.stdout.write("\n")
 
-# percent_males = count_male/iterations*100
-# sys.stdout.write("%s percent Males" %percent_males)
-# print("")
-# percent_females = count_female/iterations*100
-# sys.stdout.write("%s percent Females" %percent_females)
-# print("")
+percent_males = count_male/iterations*100
+sys.stdout.write("%s percent Males" %percent_males)
+print("")
+percent_females = count_female/iterations*100
+sys.stdout.write("%s percent Females" %percent_females)
+print("")
 
 
 
