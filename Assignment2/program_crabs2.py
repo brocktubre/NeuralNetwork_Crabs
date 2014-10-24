@@ -5,20 +5,24 @@ import math
 import sys
 
 
-print("\n*********************************************************************************");
-print("program_crabs.py")
-sys.stdout.write("Directory ")
-print(os.getcwd())
-print("Created by Brock Tubre on 10/24/14 -- CSC475")
-print("")
-print("Using the crab’s dataset, build a classifier that can identify the sex of a crab from its physical measurements.");
-print("Five physical measurements of a crab considered are: frontal lobe size (FLB), rear width (RW), length (CL), width (CW), and depth (BD).");
-print("This program uses a Batch Gradient Descnes Algorithm")
-print("Compile & run $: python3 program_crabs2.py")
-print("*********************************************************************************\n");
+# print("\n*********************************************************************************");
+# print("program_crabs.py")
+# sys.stdout.write("Directory ")
+# print(os.getcwd())
+# print("Created by Brock Tubre on 10/24/14 -- CSC475")
+# print("")
+# print("Using the crab’s dataset, build a classifier that can identify the sex of a crab from its physical measurements.");
+# print("Five physical measurements of a crab considered are: frontal lobe size (FLB), rear width (RW), length (CL), width (CW), and depth (BD).");
+# print("This program uses a Batch Gradient Descnes Algorithm")
+# print("Compile & run $: python3 program_crabs2.py")
+# print("*********************************************************************************\n");
 
 # Random number from 1 to 199. Is used as the index for a specific crab 
 random_crab_index = random.randint(1, 199)
+count_male = 0
+count_female = 0
+plus_one_male = 0 
+plus_one_female = 0
 
 # Fills a list
 weights_list = []
@@ -42,9 +46,16 @@ CLs = []
 CWs = []
 DBs = []
 
+delta_flb_list = []
+delta_rw_list = []
+delta_cl_list = []
+delta_cw_list = []
+delta_db_list =[]
+
 learning_rate = 0.0001
 batch_size = 10
 iterations = 1000
+
 
 # Reads in CSV file and stores input values
 def ReadCsvFile():
@@ -79,12 +90,24 @@ def BatchLoopFunc(Sex, FLB, RW, CL, CW, DB):
 		total += (expected - 0.5)**2
 	total /= batch_size
 
-	# adjust weights
+	# adjust weights grab delta weights
 	weights_list[0] = weights_list[0] + learning_rate * total * FLB
+	delta_flb = Compare((weights_list[0] - learning_rate * total * FLB), weights_list[0])
 	weights_list[1] = weights_list[1] + learning_rate * total * RW
+	delta_rw = Compare((weights_list[1] - learning_rate * total * RW), weights_list[1])
 	weights_list[2] = weights_list[2] + learning_rate * total * CL
+	delta_cl = Compare((weights_list[2] - learning_rate * total * CL), weights_list[2])
 	weights_list[3] = weights_list[3] + learning_rate * total * CW
+	delta_cw = Compare((weights_list[2] - learning_rate * total * CW), weights_list[2])
 	weights_list[4] = weights_list[4] + learning_rate * total * DB
+	delta_db = Compare((weights_list[2] - learning_rate * total * DB), weights_list[2])
+
+
+	delta_flb_list.append(delta_flb)
+	delta_rw_list.append(delta_rw)
+	delta_db_list.append(delta_db)
+	delta_cl_list.append(delta_cl)
+	delta_cw_list.append(delta_cw)
 
 def HypothesisFunc(flb, rw, cl, cw, db):
 	w_sum = flb*weights_list[0] + rw*weights_list[1] + cl*weights_list[2] + cw*weights_list[3] + db*weights_list[4]
@@ -97,7 +120,7 @@ def ExpectedOutputFunc(s):
 
 def TestingFunc():
 		random_crab_index = random.randint(1, 199)
-		Sex = SEXs[random_crab_index]
+		Actual_Sex = SEXs[random_crab_index]
 		FLB = float(FLBs[random_crab_index])
 		RW = float(RWs[random_crab_index])
 		CL = float(CLs[random_crab_index])
@@ -106,25 +129,29 @@ def TestingFunc():
 		s = HypothesisFunc(FLB, RW, CL, CW, DB)
 		expected = ExpectedOutputFunc(s)
 		#sys.stdout.write("Expected: ")
-		sys.stdout.write("%s" %expected)
-		sys.stdout.write(",")
-		sys.stdout.write("%s" %Sex)
-		sys.stdout.write("\n")
+		# sys.stdout.write("%s" %expected)
+		# sys.stdout.write(",")
+		# sys.stdout.write("%s" %Actual_Sex)
+		# sys.stdout.write("\n")
 		#sys.stdout.write(" Sex: ")
 		#print(Sex)
 		#print(expected)
-		return(Sex)
+		return(Actual_Sex)
 
 # The add one function keeps up witht the number of correct of incorrect guesses in the testing funciton
-def AddOne():
+def AddOneMale():
 	global plus_one_male
-	plus_one_male = plus_one + 1
-	return (plus_one)
+	plus_one_male = plus_one_male + 1
+	return (plus_one_male)
 
-def AddOne():
+def AddOneFemale():
 	global plus_one_female
 	plus_one_female = plus_one_female + 1
-	return (plus_one_female)	
+	return (plus_one_female)
+
+def Compare(old_weight, new_weight):
+	delta_weight = old_weight - new_weight	
+	return(delta_weight)	
 	
 # Reads CSV file and stores Sexs, Frontal lobe sizes, carapace lengths...	
 ReadCsvFile()
@@ -140,10 +167,34 @@ for i in range(iterations):
 	sex = TestingFunc()
 	if(sex == "M"):
 		count_male = AddOneMale()
-		print(count)
+		
 	else:
-		count_female = AddOneFemail()	
+		count_female = AddOneFemale()
 
+# print("--- FLBS ---")
+for i in range(iterations):
+	sys.stdout.write("%s" %delta_db_list[i])
+	sys.stdout.write("\n")
+
+# print("--- CW ---")	
+# for i in range(iterations):	
+# 	print(delta_cw_list[i])
+# print("--- CL ---")	
+# for i in range(iterations):	
+# 	print(delta_cl_list[i])
+# print("--- RW ---")
+# for i in range(iterations):	
+# 	print(delta_rw_list[i])
+# print("--- DB ---")	
+# for i in range(iterations):
+# 	print(delta_db_list[i])
+
+# percent_males = count_male/iterations*100
+# sys.stdout.write("%s percent Males" %percent_males)
+# print("")
+# percent_females = count_female/iterations*100
+# sys.stdout.write("%s percent Females" %percent_females)
+# print("")
 
 
 
