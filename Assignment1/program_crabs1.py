@@ -12,7 +12,7 @@ print(os.getcwd())
 print("Created by Brock Tubre on 09/04/14 -- CSC475")
 print("")
 print("The problem at hand is to identify the sex of a crab given the observed values for each of these physical characteristics. You are expected to feed previously recorded inputs to a Neural Network and then tuning it to produce the desired target outputs.");
-print("Compile & run $: python3 program_crabs.py")
+print("Compile & run $: python3 program_crabs1.py")
 print("*********************************************************************************\n");
 
 # Picks a random crab as input
